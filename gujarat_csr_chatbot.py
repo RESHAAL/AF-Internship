@@ -1,7 +1,5 @@
-# ============================================================
 # CSR GUJARAT AI ASSISTANT
 # PART 1 - IMPORTS + DATA LOADING + SEARCH ENGINE
-# ============================================================
 
 import streamlit as st
 import pandas as pd
@@ -15,17 +13,13 @@ from rapidfuzz import fuzz
 
 import plotly.express as px
 
-# ============================================================
 # GEMINI CONFIGURATION
-# ============================================================
 
 API_KEY = "AQ.Ab8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 client = genai.Client(api_key=API_KEY)
 
-# ============================================================
 # STREAMLIT PAGE CONFIG
-# ============================================================
 
 st.set_page_config(
     page_title="CSR Gujarat AI Assistant",
@@ -33,9 +27,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# ============================================================
 # LOAD DATA
-# ============================================================
 
 @st.cache_data
 def load_data():
@@ -53,9 +45,7 @@ def load_data():
 
 df = load_data()
 
-# ============================================================
 # CREATE SEARCHABLE TEXT
-# ============================================================
 
 @st.cache_data
 def create_search_text(df):
@@ -101,9 +91,7 @@ vectorizer = TfidfVectorizer(
 
 tfidf_matrix = vectorizer.fit_transform(search_text)
 
-# ============================================================
 # FUZZY SEARCH
-# ============================================================
 
 def fuzzy_search(query, top_k=10):
 
@@ -127,9 +115,7 @@ def fuzzy_search(query, top_k=10):
 
     return scores[:top_k]
 
-# ============================================================
 # SEMANTIC SEARCH USING TF-IDF
-# ============================================================
 
 def semantic_search(query, top_k=10):
 
@@ -155,10 +141,8 @@ def semantic_search(query, top_k=10):
 
     return results
 
-# ============================================================
 # HYBRID SEARCH
 # TF-IDF + RAPIDFUZZ
-# ============================================================
 
 def hybrid_search(query, top_k=10):
 
@@ -198,16 +182,12 @@ def hybrid_search(query, top_k=10):
 
     return matched_rows
 
-# ============================================================
 # SESSION STATE
-# ============================================================
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-    # ============================================================
 # PART 2 - GEMINI RAG ENGINE
-# ============================================================
 
 def build_context(results):
 
@@ -254,9 +234,7 @@ Comments: {row.get('Comments','')}
     return context
 
 
-# ============================================================
 # GEMINI RESPONSE GENERATION
-# ============================================================
 
 def generate_ai_response(user_query, search_results):
 
@@ -307,9 +285,7 @@ Error:
 """
 
 
-# ============================================================
 # COMPLETE SEARCH PIPELINE
-# ============================================================
 
 def get_answer(user_query):
 
@@ -326,9 +302,7 @@ def get_answer(user_query):
     return ai_answer, results
 
 
-# ============================================================
 # COMPANY CARD DISPLAY
-# ============================================================
 
 def display_company_card(company):
 
@@ -402,9 +376,7 @@ def display_company_card(company):
     st.divider()
 
 
-# ============================================================
 # TOP RESULT SUMMARY
-# ============================================================
 
 def display_top_results(results):
 
@@ -419,9 +391,7 @@ def display_top_results(results):
         )
 
 
-# ============================================================
 # QUICK SEARCH HELPER
-# ============================================================
 
 def search_and_answer(query):
 
@@ -431,17 +401,13 @@ def search_and_answer(query):
 
     return ai_response, results
 
-# ============================================================
 # PART 3 - ANALYTICS DASHBOARD
-# ============================================================
 
 def show_dashboard():
 
     st.header("📊 CSR Gujarat Analytics Dashboard")
 
-    # ========================================================
     # KPIs
-    # ========================================================
 
     total_companies = len(df)
 
@@ -471,9 +437,7 @@ def show_dashboard():
 
     st.divider()
 
-    # ========================================================
     # TOP CITIES
-    # ========================================================
 
     st.subheader("📍 Top Cities")
 
@@ -502,9 +466,7 @@ def show_dashboard():
         use_container_width=True
     )
 
-    # ========================================================
     # CSR SECTORS
-    # ========================================================
 
     st.subheader("🎯 Top CSR Areas")
 
@@ -552,9 +514,7 @@ def show_dashboard():
         use_container_width=True
     )
 
-    # ========================================================
     # COMPANY DISTRIBUTION
-    # ========================================================
 
     st.subheader("🏭 Sector Distribution")
 
@@ -584,9 +544,7 @@ def show_dashboard():
     )
 
 
-# ============================================================
 # SIDEBAR
-# ============================================================
 
 def sidebar_panel():
 
@@ -650,9 +608,7 @@ Powered by:
     )
 
 
-# ============================================================
 # DATASET OVERVIEW
-# ============================================================
 
 def dataset_overview():
 
@@ -665,16 +621,12 @@ def dataset_overview():
             use_container_width=True
         )
 
-        # ============================================================
 # PART 4 - MAIN APPLICATION
-# ============================================================
 
 # Sidebar
 sidebar_panel()
 
-# ============================================================
 # HEADER
-# ============================================================
 
 st.title("🤖 CSR Gujarat AI Assistant")
 
@@ -696,9 +648,7 @@ The assistant answers ONLY from the Gujarat CSR dataset.
 
 st.divider()
 
-# ============================================================
 # MODE SELECTION
-# ============================================================
 
 mode = st.sidebar.radio(
     "Choose View",
@@ -708,9 +658,7 @@ mode = st.sidebar.radio(
     ]
 )
 
-# ============================================================
 # DASHBOARD MODE
-# ============================================================
 
 if mode == "📊 Analytics Dashboard":
 
@@ -718,9 +666,7 @@ if mode == "📊 Analytics Dashboard":
 
     dataset_overview()
 
-# ============================================================
 # CHAT MODE
-# ============================================================
 
 else:
 
@@ -806,9 +752,7 @@ else:
                         f"Error: {str(e)}"
                     )
 
-# ============================================================
 # FOOTER
-# ============================================================
 
 st.markdown("---")
 
